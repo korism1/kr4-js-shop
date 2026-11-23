@@ -1,5 +1,6 @@
 const orderForm = document.querySelector('.order-form');
 
+// Если форма блока найдена
 if (orderForm) {
   const nameInput = orderForm.elements.name;
   const emailInput = orderForm.elements.email;
@@ -9,10 +10,12 @@ if (orderForm) {
   const formMessage = orderForm.querySelector('.form-message');
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+  // Возвращает товары в наличии в виде выпадающего списка
   getAvailableProducts(products).forEach((product) => {
     productSelect.append(new Option(product.title, product.id));
   });
 
+  // Выбираем товар, если пришли из каталога
   const productId = Number(new URLSearchParams(window.location.search).get('product'));
   const selectedProduct = findProductById(products, productId);
   if (selectedProduct?.isAvailable) {

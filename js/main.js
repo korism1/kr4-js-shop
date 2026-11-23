@@ -1,5 +1,5 @@
 function formatPrice(price) {
-  return `${price.toLocaleString('ru-RU')} руб.`;
+  return `${price.toLocaleString('ru-RU')} руб.`; // *** *** руб
 }
 
 function calculateDiscount(price, discountPercent) {
@@ -20,9 +20,9 @@ function createProductSummary(product) {
 }
 
 function createTextElement(tagName, text, ...classes) {
-  const element = document.createElement(tagName);
-  element.textContent = text;
-  element.classList.add(...classes);
+  const element = document.createElement(tagName); // создает тег
+  element.textContent = text; // название
+  element.classList.add(...classes); // добавление классов
   return element;
 }
 
@@ -34,18 +34,21 @@ function getAvailableProducts(products) {
   return products.filter((product) => product.isAvailable);
 }
 
+// Фильтр по поиску
 function searchProducts(products, query) {
-  const normalizedQuery = query.trim().toLowerCase();
+  const normalizedQuery = query.trim().toLowerCase(); // без учета крайних пробелов и капса
   return products.filter((product) => product.title.toLowerCase().includes(normalizedQuery));
 }
 
+// Фильтр по категориям
 function filterProductsByCategory(products, category) {
   return category === 'all' ? products : products.filter((product) => product.category === category);
 }
 
+// Сортировка товаров по цене
 function sortProductsByPrice(products, direction = 'asc') {
   const productsCopy = [...products];
-  if (direction === 'desc') {
+  if (direction === 'desc') { // Сначала дороже
     return productsCopy.sort((first, second) => second.price - first.price);
   }
 
@@ -56,6 +59,7 @@ function findProductById(products, id) {
   return products.find((product) => product.id === id);
 }
 
+// Сумма для дальнейшего подсчета среднего арифметического
 function calculateTotalPrice(products) {
   return products.reduce((sum, product) => sum + product.price, 0);
 }
@@ -64,10 +68,12 @@ function countAvailableProducts(products) {
   return getAvailableProducts(products).length;
 }
 
+// Средняя стоимость
 function calculateAveragePrice(products) {
   return products.length === 0 ? 0 : Math.round(calculateTotalPrice(products) / products.length);
 }
 
+// Итоговый фильтр
 function getPreparedProducts(products, query, category, sortDirection) {
   const matchingProducts = searchProducts(products, query);
   const categoryProducts = filterProductsByCategory(matchingProducts, category);
