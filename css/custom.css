@@ -1,0 +1,28 @@
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+.placeholder-box {
+  min-height: 240px;
+}
+
+.placeholder-image {
+  min-height: 320px;
+}
+
+.card-img-top {
+  height: 180px;
+  object-fit: contain;
+  background-color: #fff;
+}
+
+.product-image {
+  height: 320px;
+  object-fit: contain;
+}
