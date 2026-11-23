@@ -8,6 +8,14 @@ main {
   flex: 1;
 }
 
+.placeholder-box {
+  min-height: 240px;
+}
+
+.placeholder-image {
+  min-height: 320px;
+}
+
 .card-img-top {
   height: 180px;
   object-fit: contain;
@@ -17,16 +25,4 @@ main {
 .product-image {
   height: 320px;
   object-fit: contain;
-}
-
-.product-output {
-  white-space: pre-wrap;
-}
-
-.order-dialog {
-  width: min(30rem, calc(100% - 2rem));
-}
-
-.order-dialog::backdrop {
-  background: rgb(0 0 0 / 55%);
 }

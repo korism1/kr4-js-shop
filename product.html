@@ -6,9 +6,6 @@
   <title>Apple MacBook Air 13&quot; (M3, 2024) — Bootstrap Shop</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/custom.css">
-  <script src="js/data.js" defer></script>
-  <script src="js/main.js" defer></script>
-  <script src="js/cart.js" defer></script>
 </head>
 <body class="bg-light">
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -23,14 +20,13 @@
           <li class="nav-item"><a class="nav-link" href="catalog.html">Каталог</a></li>
           <li class="nav-item"><a class="nav-link active" aria-current="page" href="product.html">Товар</a></li>
           <li class="nav-item"><a class="nav-link" href="order.html">Заявка</a></li>
-          <li class="nav-item"><a class="nav-link" href="cart.html">Корзина <span class="badge text-bg-light" data-cart-count>0</span></a></li>
-          <li class="nav-item"><a class="nav-link" href="contacts.html">Контакты</a></li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Дополнительно</a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="catalog.html">Все товары</a></li>
               <li><a class="dropdown-item" href="order.html">Оформить заявку</a></li>
               <li><a class="dropdown-item" href="index.html#popular">Популярное</a></li>
+              <li><a class="dropdown-item" href="contacts.html">Контакты</a></li>
             </ul>
           </li>
         </ul>
@@ -57,13 +53,13 @@
         <h1 class="h2">Apple MacBook Air 13&quot; (M3, 2024)</h1>
         <p class="lead text-muted">Премиум-ультрабук с эталонной автономностью и тихой работой.</p>
         <p class="fs-3 fw-bold">от 105 000 до 135 000 руб.</p>
-        <div class="d-flex flex-wrap gap-2 mb-4" role="group" aria-label="Выбор товара">
+        <div class="btn-group mb-4" role="group" aria-label="Выбор товара">
           <a class="btn btn-primary active" aria-current="page" href="product.html">MacBook Air M3</a>
           <a class="btn btn-outline-primary" href="product-2.html">ASUS Zenbook 14</a>
           <a class="btn btn-outline-primary" href="product-3.html">HONOR MagicBook X16</a>
         </div>
-        <div class="d-flex flex-wrap gap-2 mb-4">
-          <a class="btn btn-primary btn-lg" href="order.html?product=1">Оформить заявку</a>
+        <div class="d-flex gap-2 mb-4">
+          <a class="btn btn-primary btn-lg" href="order.html">Оформить заявку</a>
           <a class="btn btn-outline-secondary btn-lg" href="catalog.html">Назад в каталог</a>
         </div>
         <div class="alert alert-warning" role="alert">

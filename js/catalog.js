@@ -4,7 +4,6 @@ const categoryFilter = document.querySelector('#category-filter');
 const sortSelect = document.querySelector('#sort-select');
 const catalogCount = document.querySelector('.catalog-count');
 const catalogEmpty = document.querySelector('.catalog-empty');
-const catalogMessage = document.querySelector('[data-catalog-message]');
 
 const catalogState = {
   query: searchInput.value,
@@ -42,28 +41,23 @@ function createProductCard(product) {
   const description = createTextElement('p', product.description, 'card-text', 'text-body-secondary');
   const status = createTextElement('span', getProductStatus(product), 'badge',
     product.isAvailable ? 'text-bg-success' : 'text-bg-secondary');
-  const rating = createTextElement('p', `Рейтинг: ${product.rating.toLocaleString('ru-RU')} из 5`, 'small', 'mt-2');
-  const price = createTextElement('p', formatPrice(calculateFinalPrice(product.price, product.discountPercent)),
+  const price = createTextElement('p', formatPrice(product.price),
     'fw-bold', 'fs-5', 'mt-auto');
 
-  if (product.discountPercent > 0) {
-    price.append(' ', createTextElement('del', formatPrice(product.price), 'small', 'fw-normal', 'text-body-secondary'));
-  }
-
   const links = createTextElement('div', '', 'd-flex', 'flex-wrap', 'gap-2');
-  const details = createTextElement('a', 'О модели', 'btn', 'btn-outline-primary');
+  const details = createTextElement('a', 'Подробнее', 'btn', 'btn-primary');
   details.href = product.detailsPage;
-  const cartButton = createTextElement('button', 'В корзину', 'btn', 'btn-primary');
-  cartButton.type = 'button';
-  cartButton.dataset.action = 'add-to-cart';
-  cartButton.dataset.productId = product.id;
-  cartButton.disabled = !product.isAvailable;
-  cartButton.setAttribute('aria-label', `В корзину: ${product.title}`);
+  const orderButton = createTextElement('button', 'Заказать', 'btn', 'btn-outline-primary');
+  orderButton.type = 'button';
+  orderButton.dataset.action = 'order';
+  orderButton.dataset.productId = product.id;
+  orderButton.disabled = !product.isAvailable;
 
-  links.append(details, cartButton);
+  links.append(details, orderButton);
   const badges = document.createElement('div');
   badges.append(status);
-  body.append(title, description, badges, rating, price, links);
+  badges.classList.add('mb-2');
+  body.append(title, description, badges, price, links);
   card.append(image, body);
   column.append(card);
 
@@ -99,19 +93,15 @@ sortSelect.addEventListener('change', (event) => {
 });
 
 productsContainer.addEventListener('click', (event) => {
-  const button = event.target.closest('[data-action="add-to-cart"]');
+  const button = event.target.closest('[data-action="order"]');
   if (!button) {
     return;
   }
 
   const selectedProduct = findProductById(products, Number(button.dataset.productId));
-  if (!selectedProduct?.isAvailable) {
-    return;
+  if (selectedProduct?.isAvailable) {
+    window.location.href = `order.html?product=${selectedProduct.id}`;
   }
-
-  catalogMessage.textContent = addToCart(selectedProduct.id)
-    ? `${selectedProduct.title}: добавлено в корзину.`
-    : `${selectedProduct.title}: достигнут предел количества.`;
 });
 
 updateCatalog();
