@@ -19,6 +19,13 @@ function createProductSummary(product) {
   return `${product.title}: ${formatPrice(finalPrice)}. Статус: ${getProductStatus(product)}.`;
 }
 
+function createTextElement(tagName, text, ...classes) {
+  const element = document.createElement(tagName);
+  element.textContent = text;
+  element.classList.add(...classes);
+  return element;
+}
+
 function getProductTitles(products) {
   return products.map((product) => product.title);
 }
