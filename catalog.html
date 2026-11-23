@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="css/custom.css">
   <script src="js/data.js" defer></script>
   <script src="js/main.js" defer></script>
+  <script src="js/cart.js" defer></script>
   <script src="js/catalog.js" defer></script>
 </head>
 <body class="bg-light">
@@ -23,6 +24,8 @@
           <li class="nav-item"><a class="nav-link active" aria-current="page" href="catalog.html">Каталог</a></li>
           <li class="nav-item"><a class="nav-link" href="product.html">Товар</a></li>
           <li class="nav-item"><a class="nav-link" href="order.html">Заявка</a></li>
+          <li class="nav-item"><a class="nav-link" href="cart.html">Корзина <span class="badge text-bg-light" data-cart-count>0</span></a></li>
+          <li class="nav-item"><a class="nav-link" href="contacts.html">Контакты</a></li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Дополнительно</a>
             <ul class="dropdown-menu">
@@ -69,6 +72,7 @@
 
     <p class="catalog-count text-body-secondary" aria-live="polite"></p>
     <p class="catalog-empty alert alert-info" hidden>По выбранным условиям товары не найдены.</p>
+    <p class="visually-hidden" data-catalog-message role="status"></p>
     <div class="products-grid row g-4" data-products-container></div>
     <noscript><p>Для просмотра каталога включите JavaScript.</p></noscript>
   </main>

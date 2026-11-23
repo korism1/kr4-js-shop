@@ -7,16 +7,49 @@ if (orderForm) {
   const agreeInput = orderForm.elements.agree;
   const productSelect = orderForm.elements.product;
   const formMessage = orderForm.querySelector('.form-message');
+  const orderDialog = document.querySelector('#order-dialog');
+  const submitButton = orderForm.querySelector('button[type="submit"]');
+  const orderHeading = document.querySelector('#order-title');
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const orderParams = new URLSearchParams(window.location.search);
+  const fromCart = orderParams.get('from') === 'cart';
 
-  getAvailableProducts(products).forEach((product) => {
-    productSelect.append(new Option(product.title, product.id));
-  });
+  if (fromCart) {
+    document.querySelector('[data-order-product-group]').hidden = true;
+    productSelect.disabled = true;
+    document.querySelector('[data-order-cart]').hidden = false;
+  } else {
+    getAvailableProducts(products).forEach((product) => {
+      productSelect.append(new Option(product.title, product.id));
+    });
+    const selectedProduct = findProductById(products, Number(orderParams.get('product')));
+    if (selectedProduct?.isAvailable) {
+      productSelect.value = selectedProduct.id;
+    }
+  }
 
-  const productId = Number(new URLSearchParams(window.location.search).get('product'));
-  const selectedProduct = findProductById(products, productId);
-  if (selectedProduct?.isAvailable) {
-    productSelect.value = selectedProduct.id;
+  function renderOrderCart() {
+    const items = getCartItems();
+    const list = document.querySelector('[data-order-items]');
+    const total = document.querySelector('[data-order-total]');
+    const empty = document.querySelector('[data-order-empty]');
+    const hasItems = items.length > 0;
+
+    list.textContent = '';
+    items.forEach(({ product, quantity }) => {
+      list.append(createTextElement('li', `${product.title} × ${quantity}`));
+    });
+    total.textContent = hasItems ? `Итого: ${formatPrice(getCartTotals(items).total)}` : '';
+    empty.hidden = hasItems;
+    submitButton.disabled = !hasItems;
+  }
+
+  function getPhoneDigits() {
+    return phoneInput.value.replace(/\D/g, '');
+  }
+
+  function isPhoneValid() {
+    return /^[+\d()\s-]+$/.test(phoneInput.value.trim()) && /^[78]\d{10}$/.test(getPhoneDigits());
   }
 
   const fields = [
@@ -32,11 +65,7 @@ if (orderForm) {
     },
     {
       input: phoneInput,
-      isValid: () => {
-        const value = phoneInput.value.trim();
-        const digits = value.replace(/\D/g, '');
-        return /^[+\d()\s-]+$/.test(value) && /^[78]\d{10}$/.test(digits);
-      },
+      isValid: isPhoneValid,
       message: 'Введите 11 цифр телефона. Номер должен начинаться с +7 или 8.'
     },
     {
@@ -83,8 +112,23 @@ if (orderForm) {
     formMessage.textContent = '';
   });
 
+  phoneInput.addEventListener('blur', () => {
+    if (isPhoneValid()) {
+      const digits = getPhoneDigits();
+      phoneInput.value = `+7 (${digits.slice(1, 4)}) ${digits.slice(4, 7)}-${digits.slice(7, 9)}-${digits.slice(9)}`;
+    }
+  });
+
+  orderDialog.addEventListener('close', () => {
+    (submitButton.disabled ? orderHeading : submitButton).focus();
+  });
+
   orderForm.addEventListener('submit', (event) => {
     event.preventDefault();
+    if (fromCart && getCartItems().length === 0) {
+      return;
+    }
+
     const invalidFields = fields.filter((field) => !validateField(field));
 
     if (invalidFields.length > 0) {
@@ -95,8 +139,22 @@ if (orderForm) {
       return;
     }
 
-    formMessage.textContent = 'Заявка подготовлена. Это учебная форма.';
+    orderForm.reset();
+    if (fromCart) {
+      clearCart();
+      renderOrderCart();
+    }
+
+    formMessage.textContent = 'Заявка подготовлена. Проверка пройдена.';
     formMessage.classList.remove('text-danger');
     formMessage.classList.add('text-success');
+    orderDialog.showModal();
   });
+
+  if (fromCart) {
+    renderOrderCart();
+    window.addEventListener('kr4-cart-updated', renderOrderCart);
+  } else {
+    submitButton.disabled = false;
+  }
 }

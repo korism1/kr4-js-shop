@@ -4,6 +4,7 @@ const categoryFilter = document.querySelector('#category-filter');
 const sortSelect = document.querySelector('#sort-select');
 const catalogCount = document.querySelector('.catalog-count');
 const catalogEmpty = document.querySelector('.catalog-empty');
+const catalogMessage = document.querySelector('[data-catalog-message]');
 
 const catalogState = {
   query: searchInput.value,
@@ -52,13 +53,14 @@ function createProductCard(product) {
   const links = createTextElement('div', '', 'd-flex', 'flex-wrap', 'gap-2');
   const details = createTextElement('a', 'О модели', 'btn', 'btn-outline-primary');
   details.href = product.detailsPage;
-  const orderButton = createTextElement('button', 'Заказать', 'btn', 'btn-primary');
-  orderButton.type = 'button';
-  orderButton.dataset.action = 'order';
-  orderButton.dataset.productId = product.id;
-  orderButton.disabled = !product.isAvailable;
+  const cartButton = createTextElement('button', 'В корзину', 'btn', 'btn-primary');
+  cartButton.type = 'button';
+  cartButton.dataset.action = 'add-to-cart';
+  cartButton.dataset.productId = product.id;
+  cartButton.disabled = !product.isAvailable;
+  cartButton.setAttribute('aria-label', `В корзину: ${product.title}`);
 
-  links.append(details, orderButton);
+  links.append(details, cartButton);
   const badges = document.createElement('div');
   badges.append(status);
   body.append(title, description, badges, rating, price, links);
@@ -97,15 +99,19 @@ sortSelect.addEventListener('change', (event) => {
 });
 
 productsContainer.addEventListener('click', (event) => {
-  const button = event.target.closest('[data-action="order"]');
+  const button = event.target.closest('[data-action="add-to-cart"]');
   if (!button) {
     return;
   }
 
   const selectedProduct = findProductById(products, Number(button.dataset.productId));
-  if (selectedProduct?.isAvailable) {
-    window.location.href = `order.html?product=${selectedProduct.id}`;
+  if (!selectedProduct?.isAvailable) {
+    return;
   }
+
+  catalogMessage.textContent = addToCart(selectedProduct.id)
+    ? `${selectedProduct.title}: добавлено в корзину.`
+    : `${selectedProduct.title}: достигнут предел количества.`;
 });
 
 updateCatalog();

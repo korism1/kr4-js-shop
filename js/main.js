@@ -74,26 +74,19 @@ function getPreparedProducts(products, query, category, sortDirection) {
   return sortProductsByPrice(categoryProducts, sortDirection);
 }
 
-console.log('Файл main.js подключён');
-console.table(products);
-console.log(getProductTitles(products));
-console.table(getAvailableProducts(products));
-console.table(searchProducts(products, 'zenbook'));
-console.table(getPreparedProducts(products, 'zenbook', 'ultrabooks', 'asc'));
-console.log(findProductById(products, 1));
-console.log('Общая стоимость:', calculateTotalPrice(products));
-
 const messageElement = document.querySelector('.js-message');
 const productOutputElement = document.querySelector('.product-output');
 
 if (messageElement) {
   messageElement.textContent = 'Массив товаров и функции обработки данных подключены.';
+  console.table(products);
 }
 
 if (productOutputElement) {
   productOutputElement.textContent = [
     `Всего товаров: ${products.length}`,
     `Товаров в наличии: ${countAvailableProducts(products)}`,
+    `Общая стоимость: ${formatPrice(calculateTotalPrice(products))}`,
     `Средняя цена: ${formatPrice(calculateAveragePrice(products))}`,
     `Результатов поиска «zenbook»: ${searchProducts(products, 'zenbook').length}`,
     createProductSummary(products[0])
